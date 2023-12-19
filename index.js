@@ -30,11 +30,11 @@ io.on("connection", (socket) => {
       : `Привет ${user.name}`;
 
     socket.emit("message", {
-      data: { user: { name: "Admin" }, message: userMessage },
+      data: { user: { name: "Админ" }, message: userMessage },
     });
 
     socket.broadcast.to(user.room).emit("message", {
-      data: { user: { name: "Admin" }, message: `${user.name} Присоединился` },
+      data: { user: { name: "Админ" }, message: `${user.name} Присоединился` },
     });
 
     io.to(user.room).emit("room", {
@@ -57,7 +57,7 @@ io.on("connection", (socket) => {
       const { room, name } = user;
 
       io.to(room).emit("message", {
-        data: { user: { name: "Admin" }, message: `${name} has left` },
+        data: { user: { name: "Админ" }, message: `${name} Покинул чат` },
       });
 
       io.to(room).emit("room", {
