@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
     "X-Requested-With,content-type"
   );
 
-  res.send("Это только мой мир.");
+  res.send("Этssо только мой мир.");
 });
 
 module.exports = router;

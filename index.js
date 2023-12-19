@@ -26,15 +26,15 @@ io.on("connection", (socket) => {
     const { user, isExist } = addUser({ name, room });
 
     const userMessage = isExist
-      ? `${user.name}, here you go again`
-      : `Hey my love ${user.name}`;
+      ? `${user.name}, Вы снова здесь`
+      : `Привет ${user.name}`;
 
     socket.emit("message", {
       data: { user: { name: "Admin" }, message: userMessage },
     });
 
     socket.broadcast.to(user.room).emit("message", {
-      data: { user: { name: "Admin" }, message: `${user.name} has joined` },
+      data: { user: { name: "Admin" }, message: `${user.name} Присоединился` },
     });
 
     io.to(user.room).emit("room", {
