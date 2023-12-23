@@ -4,7 +4,6 @@ const { Server } = require("socket.io");
 const cors = require("cors");
 const app = express();
 const { Pool } = require("pg");
-
 const route = require("./route");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 
@@ -12,11 +11,11 @@ app.use(cors({ origin: "*" }));
 app.use(route);
 
 const pool = new Pool({
-  user: "storm",
-  password: "meepo2014",
   host: "localhost",
-  port: 5432,
   database: "test",
+  username: "storm",
+  password: "meepo2014",
+  port: 5432,
 });
 app.use(express.json());
 app.post("/request", async function createUser(req, res) {
