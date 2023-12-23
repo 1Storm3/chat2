@@ -3,12 +3,33 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const app = express();
+const { Pool } = require("pg");
 
 const route = require("./route");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 
 app.use(cors({ origin: "*" }));
 app.use(route);
+
+const pool = new Pool({
+  user: "storm",
+  password: "meepo2014",
+  host: "localhost",
+  port: 5432,
+  database: "test",
+});
+app.use(express.json());
+app.post(
+  "https://online-chatix.netlify.app/request/querry",
+  async function createUser(req, res) {
+    const { name, surname } = req.body;
+    const newPerson = await pool.query(
+      "INSERT INTO person (name, surname) values ($1, $2) RETURNING *",
+      [name, surname]
+    );
+    res.json(newPerson.rows[0]);
+  }
+);
 
 const server = http.createServer(app);
 
@@ -71,6 +92,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5000, () => {
+server.listen(80, () => {
   console.log("Server is running");
 });
