@@ -19,7 +19,7 @@ const pool = new Pool({
   database: "test",
 });
 app.use(express.json());
-app.post("/request/querry", async function createUser(req, res) {
+app.post("/request", async function createUser(req, res) {
   const { name, surname } = req.body;
   const newPerson = await pool.query(
     "INSERT INTO person (name, surname) values ($1, $2) RETURNING *",
