@@ -11,8 +11,7 @@ app.use(cors({ origin: "*" }));
 app.use(route);
 require("dotenv").config();
 const pool = new Pool({
-  connectionString:
-    "postgresql://1Storm3:i9dKLfvOZ4VB@ep-little-heart-a2jwzp1j.eu-central-1.aws.neon.tech/test?sslmode=true",
+  connectionString: process.env.DATABASE_URL,
   ssl: {
     require: true,
   },
@@ -88,6 +87,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(80, () => {
+server.listen(81, () => {
   console.log("Server is running");
 });
