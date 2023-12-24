@@ -2,20 +2,20 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-const app = express();
+
 const { Pool } = require("pg");
 const route = require("./route");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
-
+const app = express();
 app.use(cors({ origin: "*" }));
 app.use(route);
-
+require("dotenv").config();
 const pool = new Pool({
-  host: "localhost",
-  database: "test",
-  username: "storm",
-  password: "meepo2014",
-  port: 5432,
+  connectionString:
+    "postgresql://1Storm3:i9dKLfvOZ4VB@ep-little-heart-a2jwzp1j.eu-central-1.aws.neon.tech/test?sslmode=true",
+  ssl: {
+    require: true,
+  },
 });
 app.use(express.json());
 app.post("/request", async function createUser(req, res) {
