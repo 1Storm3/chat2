@@ -43,7 +43,7 @@ io.on("connection", (socket) => {
 
     const userMessage = isExist
       ? `${user.name}, Вы снова здесь`
-      : `Привет, ${user.name}`;
+      : `Добро пожаловать в чат, ${user.name}`;
 
     socket.emit("message", {
       data: { user: { name: "" }, message: userMessage },
@@ -51,7 +51,7 @@ io.on("connection", (socket) => {
 
     socket.broadcast.to(user.room).emit("message", {
       data: {
-        user: { name: "Админ" },
+        user: { name: "" },
         message: `${user.name} присоединился`,
       },
     });
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
       const { room, name } = user;
 
       io.to(room).emit("message", {
-        data: { user: { name: "Админ" }, message: `${name} покинул чат` },
+        data: { user: { name: "" }, message: `${name} покинул чат` },
       });
 
       io.to(room).emit("room", {
