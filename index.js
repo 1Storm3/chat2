@@ -51,7 +51,6 @@ io.on("connection", (socket) => {
 
     socket.broadcast.to(user.room).emit("message", {
       data: {
-        user: { name: "Админ" },
         message: `${user.name} Присоединился`,
       },
     });
