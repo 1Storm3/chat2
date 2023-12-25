@@ -52,7 +52,7 @@ io.on("connection", (socket) => {
     socket.broadcast.to(user.room).emit("message", {
       data: {
         user: { name: "Админ" },
-        message: `${user.name} Присоединился`,
+        message: `${user.name} присоединился`,
       },
     });
 
@@ -76,7 +76,7 @@ io.on("connection", (socket) => {
       const { room, name } = user;
 
       io.to(room).emit("message", {
-        data: { user: { name: "Админ" }, message: `${name} Покинул чат` },
+        data: { user: { name: "Админ" }, message: `${name} покинул чат` },
       });
 
       io.to(room).emit("room", {
