@@ -10,6 +10,7 @@ const app = express();
 app.use(cors({ origin: "*" }));
 app.use(route);
 require("dotenv").config();
+const moment = require("moment");
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -24,10 +25,12 @@ app.post("/request", async function createUser(req, res) {
     [name, surname]
   );
   res.json(newPerson.rows[0]);
+
+  app.get("/request", async function getUsers(req, res) {});
 });
 
 const server = http.createServer(app);
-
+const time = moment().format("HH:mm");
 const io = new Server(server, {
   cors: {
     origin: "*",
