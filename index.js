@@ -46,11 +46,14 @@ io.on("connection", (socket) => {
       : `Привет, ${user.name}`;
 
     socket.emit("message", {
-      data: { user: { name: "Админ" }, message: userMessage },
+      data: { user: { name: undefined }, message: userMessage },
     });
 
     socket.broadcast.to(user.room).emit("message", {
-      data: { user: { name: "Админ" }, message: `${user.name} Присоединился` },
+      data: {
+        user: { name: undefined },
+        message: `${user.name} Присоединился`,
+      },
     });
 
     io.to(user.room).emit("room", {
