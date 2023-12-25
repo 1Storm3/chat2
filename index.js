@@ -27,7 +27,6 @@ app.post("/request", async function createUser(req, res) {
 });
 
 const server = http.createServer(app);
-const time = moment().format("HH:mm");
 const io = new Server(server, {
   cors: {
     origin: "*",
