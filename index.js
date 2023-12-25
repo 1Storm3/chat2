@@ -46,12 +46,12 @@ io.on("connection", (socket) => {
       : `Привет, ${user.name}`;
 
     socket.emit("message", {
-      data: { user: { name: undefined }, message: userMessage },
+      data: { user: { name: null }, message: userMessage },
     });
 
     socket.broadcast.to(user.room).emit("message", {
       data: {
-        user: { name: undefined },
+        user: { name: null },
         message: `${user.name} Присоединился`,
       },
     });
