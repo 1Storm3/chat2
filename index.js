@@ -2,21 +2,28 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-
+const moment = require("moment");
 const { Pool } = require("pg");
 const route = require("./route");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
-const app = express();
-app.use(cors({ origin: "*" }));
-app.use(route);
 require("dotenv").config();
+const app = express();
+
+app.use(cors({ origin: "*" }));
+
+app.use(route);
+
+let time = moment().format("HH:mm");
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     require: true,
   },
 });
+
 app.use(express.json());
+
 app.post("/request", async function createUser(req, res) {
   const { name, surname } = req.body;
   const newPerson = await pool.query(
@@ -45,13 +52,14 @@ io.on("connection", (socket) => {
       : `Добро пожаловать в чат, ${user.name}`;
 
     socket.emit("message", {
-      data: { user: { name: "" }, message: userMessage },
+      data: { user: { name: "" }, message: userMessage, time: time },
     });
 
     socket.broadcast.to(user.room).emit("message", {
       data: {
         user: { name: "" },
         message: `${user.name} присоединился`,
+        time: time,
       },
     });
 
@@ -64,7 +72,7 @@ io.on("connection", (socket) => {
     const user = findUser(params);
 
     if (user) {
-      io.to(user.room).emit("message", { data: { user, message } });
+      io.to(user.room).emit("message", { data: { user, message, time } });
     }
   });
 
@@ -75,7 +83,11 @@ io.on("connection", (socket) => {
       const { room, name } = user;
 
       io.to(room).emit("message", {
-        data: { user: { name: "" }, message: `${name} покинул чат` },
+        data: {
+          user: { name: "" },
+          message: `${name} покинул чат`,
+          time: time,
+        },
       });
 
       io.to(room).emit("room", {
