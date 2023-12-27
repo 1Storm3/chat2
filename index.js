@@ -33,6 +33,11 @@ app.post("/request", async function createUser(req, res) {
   res.json(newPerson.rows[0]);
 });
 
+app.get("/users", async function getUsers(req, res) {
+  const users = await pool.query("SELECT * FROM person");
+  res.json(users.rows);
+});
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
