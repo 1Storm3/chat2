@@ -13,8 +13,6 @@ app.use(cors({ origin: "*" }));
 
 app.use(route);
 
-let time = moment().format("HH:mm");
-
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -51,7 +49,7 @@ io.on("connection", (socket) => {
     socket.join(room);
 
     const { user, isExist } = addUser({ name, room });
-
+    let time = moment().format("HH:mm");
     const userMessage = isExist
       ? `${user.name}, Вы снова здесь`
       : `Добро пожаловать в чат, ${user.name}`;
@@ -75,7 +73,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", ({ message, params }) => {
     const user = findUser(params);
-
+    let time = moment().format("HH:mm");
     if (user) {
       io.to(user.room).emit("message", { data: { user, message, time } });
     }
@@ -86,7 +84,7 @@ io.on("connection", (socket) => {
 
     if (user) {
       const { room, name } = user;
-
+      let time = moment().format("HH:mm");
       io.to(room).emit("message", {
         data: {
           user: { name: "" },
