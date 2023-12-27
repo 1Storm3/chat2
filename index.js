@@ -35,7 +35,7 @@ app.post("/request", async function createUser(req, res) {
 
 app.get("/users", async function getUsers(req, res) {
   const users = await pool.query("SELECT * FROM person");
-  res.json(users.rows);
+  res.send(users.rows);
 });
 
 const server = http.createServer(app);
