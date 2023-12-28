@@ -6,9 +6,10 @@ const moment = require("moment");
 const { Pool } = require("pg");
 const route = require("./route");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
+const createUser = require("./middlewares/createUser");
 require("dotenv").config();
 const app = express();
-
+const saveMessage = require("./saveMessage");
 app.use(cors({ origin: "*" }));
 
 app.use(route);
@@ -22,19 +23,12 @@ const pool = new Pool({
 
 app.use(express.json());
 
-app.post("/request", async function createUser(req, res) {
-  const { name, surname } = req.body;
-  const newPerson = await pool.query(
-    "INSERT INTO person (name, surname) values ($1, $2) RETURNING *",
-    [name, surname]
-  );
-  res.json(newPerson.rows[0]);
-});
+app.post("/request", createUser);
 
-app.get("/users", async function getUsers(req, res) {
-  const users = await pool.query("SELECT * FROM person");
-  res.send(users.rows);
-});
+// app.get("/users", async function getUsers(req, res) {
+//   const users = await pool.query("SELECT * FROM person");
+//   res.send(users.rows);
+// });
 
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -72,10 +66,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ message, params }) => {
-    const user = findUser(params);
+    const username = findUser(params);
     let time = moment().format("HH:mm");
-    if (user) {
-      io.to(user.room).emit("message", { data: { user, message, time } });
+    if (username) {
+      io.to(username.room).emit("message", {
+        data: { username, message, time },
+      });
+      const data = { username, message, time };
+      saveMessage(data)
+        .then((response) => console.log(response))
+        .catch((err) => console.log(err));
     }
   });
 
