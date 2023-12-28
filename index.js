@@ -66,6 +66,9 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ message, params }) => {
+    saveMessage(data)
+      .then((response) => console.log(response))
+      .catch((err) => console.log(err));
     const username = findUser(params);
     let time = moment().format("HH:mm");
     if (username) {
@@ -73,9 +76,6 @@ io.on("connection", (socket) => {
         data: { username, message, time },
       });
       const data = { username, message, time };
-      saveMessage(data)
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err));
     }
   });
 
