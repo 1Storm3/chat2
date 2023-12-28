@@ -9,8 +9,8 @@ const pool = new Pool({
 async function saveMessage(data) {
   const { message, time, username } = data;
   await pool.query(
-    "INSERT INTO messages (message, username, timedata) values ($1, $2, $3) RETURNING *",
-    [message, username, time]
+    "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
+    [message, username.name, time, username.room]
   );
 }
 
