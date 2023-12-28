@@ -8,11 +8,10 @@ const pool = new Pool({
 
 async function saveMessage(data) {
   const { message, time, username } = data;
-  const newMessages = await pool.query(
+  await pool.query(
     "INSERT INTO messages (message, username, timedata) values ($1, $2, $3) RETURNING *",
     [message, username, time]
   );
-  res.json(newMessages.rows[0]);
 }
 
 module.exports = saveMessage;
