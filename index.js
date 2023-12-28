@@ -66,13 +66,13 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", ({ message, params }) => {
-    const username = findUser(params);
+    const user = findUser(params);
     let time = moment().format("HH:mm");
-    if (username) {
-      io.to(username.room).emit("message", {
-        data: { username, message, time },
+    if (user) {
+      io.to(user.room).emit("message", {
+        data: { user, message, time },
       });
-      const data = { username, message, time };
+      const data = { user, message, time };
       saveMessage(data)
         .then((response) => console.log(response))
         .catch((err) => console.log(err));
