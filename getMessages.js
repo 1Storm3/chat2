@@ -1,5 +1,4 @@
 const { Pool } = require("pg");
-
 // const pool = new Pool({
 //   connectionString: process.env.DATABASE_URL,
 //   ssl: {
@@ -15,12 +14,11 @@ const pool = new Pool({
   port: 5432,
 });
 
-async function saveMessage(data) {
-  const { message, time, user } = data;
-  await pool.query(
-    "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
-    [message, user.name, time, user.room]
+async function getMessages(room) {
+  let newMessages = await pool.query(
+    `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
   );
+  newMessages = JSON.stringify(newMessages);
 }
 
-module.exports = saveMessage;
+module.exports = getMessages;

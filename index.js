@@ -12,6 +12,8 @@ const app = express();
 const saveMessage = require("./saveMessage");
 app.use(cors({ origin: "*" }));
 
+const getMessages = require("./getMessages");
+
 app.use(route);
 
 const pool = new Pool({
@@ -42,8 +44,16 @@ io.on("connection", (socket) => {
   socket.on("join", ({ name, room }) => {
     socket.join(room);
 
+    getMessages(room)
+      .then((last100Messages) => {
+        socket.emit("last_100_messages", last100Messages);
+      })
+      .catch((err) => console.log(err));
+
     const { user, isExist } = addUser({ name, room });
+
     let time = moment().format("HH:mm");
+
     const userMessage = isExist
       ? `${user.name}, Вы снова здесь`
       : `Добро пожаловать в чат, ${user.name}`;
