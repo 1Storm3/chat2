@@ -23,6 +23,7 @@ async function getMessages(room) {
   if (newMessages === null) {
     newMessages = [];
   }
+  return newMessages;
 }
 
 module.exports = getMessages;
