@@ -18,11 +18,8 @@ async function getMessages(room) {
   let newMessages = await pool.query(
     `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
   );
-  console.log(newMessages);
-  if (newMessages === null) {
-    newMessages = [];
-  }
-  return newMessages;
+
+  return newMessages.rows;
 }
 
 module.exports = getMessages;
