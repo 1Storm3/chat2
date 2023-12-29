@@ -15,6 +15,7 @@ const pool = new Pool({
 // });
 
 async function getMessages(room) {
+  console.log(room);
   let newMessages = await pool.query(
     `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
   );
