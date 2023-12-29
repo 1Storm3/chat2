@@ -18,7 +18,9 @@ async function getMessages(room) {
   let newMessages = await pool.query(
     `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
   );
-  newMessages = JSON.stringify(newMessages);
+  if (newMessages === null) {
+    newMessages = [];
+  }
 }
 
 module.exports = getMessages;
