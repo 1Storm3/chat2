@@ -59,12 +59,16 @@ io.on("connection", (socket) => {
       : `Добро пожаловать в чат, ${user.name}`;
 
     socket.emit("message", {
-      data: { user: { name: "" }, message: userMessage, time: time },
+      data: {
+        user: { name: "Администратор" },
+        message: userMessage,
+        time: time,
+      },
     });
 
     socket.broadcast.to(user.room).emit("message", {
       data: {
-        user: { name: "" },
+        user: { name: "Администратор" },
         message: `${user.name} присоединился`,
         time: time,
       },
@@ -97,7 +101,7 @@ io.on("connection", (socket) => {
       let time = moment().format("HH:mm");
       io.to(room).emit("message", {
         data: {
-          user: { name: "" },
+          user: { name: "Администратор" },
           message: `${name} покинул чат`,
           time: time,
         },
