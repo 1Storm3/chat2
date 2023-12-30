@@ -19,7 +19,6 @@ async function getMessages(room) {
     `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
   );
   newMessages = JSON.stringify(newMessages.rows);
-  console.log(newMessages);
   return newMessages;
 }
 
