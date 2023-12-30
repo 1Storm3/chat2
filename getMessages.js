@@ -16,7 +16,7 @@ const pool = new Pool({
 
 async function getMessages(room) {
   let newMessages = await pool.query(
-    `SELECT * FROM messages WHERE room = ${room} LIMIT 100`
+    `SELECT * FROM messages WHERE room = ${room} ORDER BY timedata ASC LIMIT 100`
   );
   newMessages = JSON.stringify(newMessages.rows);
   return newMessages;
