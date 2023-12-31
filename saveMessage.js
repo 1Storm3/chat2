@@ -17,9 +17,11 @@ const pool = new Pool({
 
 async function saveMessage(data) {
   const { message, time, user } = data;
+  const currentDate = new Date().toISOString().slice(0, 10);
+  const dateTime = `${currentDate}T${time}:00.000Z`;
   await pool.query(
     "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
-    [message, user.name, time, user.room]
+    [message, user.name, dateTime, user.room]
   );
 }
 
