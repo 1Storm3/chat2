@@ -21,6 +21,7 @@ async function getMessages(room) {
   );
   // newMessages = JSON.stringify(newMessages.rows);
   // return newMessages;
+
   return newMessages.rows;
 }
 
