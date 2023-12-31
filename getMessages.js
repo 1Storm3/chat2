@@ -16,10 +16,12 @@ const pool = new Pool({
 
 async function getMessages(room) {
   let newMessages = await pool.query(
-    `SELECT * FROM messages WHERE room = ${room} ORDER BY timedata ASC LIMIT 100`
+    `SELECT * FROM messages WHERE room = $1 ORDER BY timedata ASC LIMIT 100`,
+    [room]
   );
-  newMessages = JSON.stringify(newMessages.rows);
-  return newMessages;
+  // newMessages = JSON.stringify(newMessages.rows);
+  // return newMessages;
+  return newMessages.rows;
 }
 
 module.exports = getMessages;
