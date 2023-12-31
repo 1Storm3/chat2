@@ -25,7 +25,7 @@ const pool = new Pool({
 
 app.use(express.json());
 
-app.post("/login", createUser);
+app.use("/login", createUser);
 
 // app.get("/users", async function getUsers(req, res) {
 //   const users = await pool.query("SELECT * FROM person");
@@ -40,7 +40,7 @@ const io = new Server(server, {
   },
 });
 
-const LoadMessages = (room) => {
+const LoadMessages = (socket, room) => {
   getMessages(room)
     .then((last100Messages) => {
       socket.emit("last_100_messages", last100Messages);
