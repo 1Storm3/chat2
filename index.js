@@ -25,7 +25,7 @@ const pool = new Pool({
 
 app.use(express.json());
 
-app.post("/request", createUser);
+app.post("/login", createUser);
 
 // app.get("/users", async function getUsers(req, res) {
 //   const users = await pool.query("SELECT * FROM person");
