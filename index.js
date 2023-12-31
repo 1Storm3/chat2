@@ -40,19 +40,15 @@ const io = new Server(server, {
   },
 });
 
-const LoadMessages = (socket, room) => {
-  getMessages(room)
-    .then((last100Messages) => {
-      socket.emit("last_100_messages", last100Messages);
-    })
-    .catch((err) => console.log(err));
-};
-
 io.on("connection", (socket) => {
   socket.on("join", ({ name, room }) => {
     socket.join(room);
 
-    LoadMessages();
+    getMessages(room)
+      .then((last100Messages) => {
+        socket.emit("last_100_messages", last100Messages);
+      })
+      .catch((err) => console.log(err));
 
     const { user, isExist } = addUser({ name, room });
 
