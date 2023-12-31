@@ -22,7 +22,7 @@ async function getMessages(room) {
   // newMessages = JSON.stringify(newMessages.rows);
   // return newMessages;
 
-  return newMessages.rows;
+  return JSON.stringify(newMessages.rows);
 }
 
 module.exports = getMessages;
