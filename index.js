@@ -46,17 +46,7 @@ io.on("connection", (socket) => {
 
     getMessages(room)
       .then((last100Messages) => {
-        const formattedMessages = last100Messages.map((message) => {
-          const time = new Date(message.timedata).toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          return {
-            ...message,
-            timedata: time,
-          };
-        });
-        socket.emit("last_100_messages", formattedMessages);
+        socket.emit("last_100_messages", last100Messages);
       })
       .catch((err) => console.log(err));
 
