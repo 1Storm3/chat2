@@ -17,8 +17,20 @@ const pool = new Pool({
 
 async function saveMessage(data) {
   const { message, time, user } = data;
+  // const currentDate = new Date().toISOString().slice(0, 10);
+  // const dateTime = `${currentDate}T${time}`;
   const currentDate = new Date().toISOString().slice(0, 10);
-  const dateTime = `${currentDate}T${time}`;
+
+  // Парсим переданное время в формате HH:mm
+  const currentTime = new Date(`2000-01-01T${time}`);
+
+  // Форматируем часы и минуты для времени
+  const formattedTime = `${("0" + currentTime.getHours()).slice(-2)}:${(
+    "0" + currentTime.getMinutes()
+  ).slice(-2)}`;
+
+  // Создаем строку с датой и временем в нужном формате
+  const dateTime = `${currentDate} ${formattedTime}`;
   await pool.query(
     "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
     [message, user.name, dateTime, user.room]
