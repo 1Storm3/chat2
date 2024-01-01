@@ -1,5 +1,4 @@
 const { Pool } = require("pg");
-const moment = require("moment");
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -21,7 +20,7 @@ async function saveMessage(data) {
   const dateTime = `${currentDate}T${time}`;
 
   await pool.query(
-    "INSERT INTO messages (message, username, timedata, room) VALUES (%L, %L, %s, %L) RETURNING *",
+    "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
     [message, user.name, dateTime, user.room]
   );
 }
