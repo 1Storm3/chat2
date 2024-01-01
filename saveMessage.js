@@ -19,16 +19,12 @@ async function saveMessage(data) {
   const { message, time, user } = data;
   // const currentDate = new Date().toISOString().slice(0, 10);
   // const dateTime = `${currentDate}T${time}`;
-  const currentDate = new Date().toISOString().slice(0, 10);
-
-  // Разбиваем переданное время на часы и минуты
-  const [hours, minutes] = time.split(":");
-
-  // Формируем строку с датой и временем в нужном формате
-  const dateTime = `${currentDate} ${hours}:${minutes}`;
+  const formattedTime = moment(`2000-01-01T${time}`).format(
+    "YYYY-MM-DD HH:mm:ss"
+  );
   await pool.query(
     "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
-    [message, user.name, dateTime, user.room]
+    [message, user.name, formattedTime, user.room]
   );
 }
 
