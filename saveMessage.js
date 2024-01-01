@@ -21,10 +21,13 @@ async function saveMessage(data) {
   // const dateTime = `${currentDate}T${time}`;
   const currentDate = new Date().toISOString().slice(0, 10);
 
-  // Парсим переданное время в формате HH:mm
-  const currentTime = new Date(`2000-01-01T${time}`);
+  // Форматируем переданное время
+  const [hours, minutes] = time.split(":");
+  const currentTime = new Date();
+  currentTime.setHours(hours);
+  currentTime.setMinutes(minutes);
 
-  // Форматируем часы и минуты для времени
+  // Форматируем время в нужный формат HH:mm
   const formattedTime = `${("0" + currentTime.getHours()).slice(-2)}:${(
     "0" + currentTime.getMinutes()
   ).slice(-2)}`;
