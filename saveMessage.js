@@ -1,5 +1,5 @@
 const { Pool } = require("pg");
-
+const moment = require("moment");
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
@@ -19,20 +19,9 @@ async function saveMessage(data) {
   const { message, time, user } = data;
   // const currentDate = new Date().toISOString().slice(0, 10);
   // const dateTime = `${currentDate}T${time}`;
-  const currentDate = new Date().toISOString().slice(0, 10);
+  const currentDate = moment().format("YYYY-MM-DD");
+  const formattedTime = moment(`2000-01-01T${time}`).format("HH:mm");
 
-  // Форматируем переданное время
-  const [hours, minutes] = time.split(":");
-  const currentTime = new Date();
-  currentTime.setHours(hours);
-  currentTime.setMinutes(minutes);
-
-  // Форматируем время в нужный формат HH:mm
-  const formattedTime = `${("0" + currentTime.getHours()).slice(-2)}:${(
-    "0" + currentTime.getMinutes()
-  ).slice(-2)}`;
-
-  // Создаем строку с датой и временем в нужном формате
   const dateTime = `${currentDate} ${formattedTime}`;
   await pool.query(
     "INSERT INTO messages (message, username, timedata, room) values ($1, $2, $3, $4) RETURNING *",
