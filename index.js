@@ -75,11 +75,9 @@ app.post("/", async (req, res) => {
         });
 
         res.status(200).json({ message: "true" });
-      } else {
-        res.status(401).json({ message: "false" });
       }
     } else {
-      res.status(401).json({ message: "user not find" });
+      res.status(401).json({ message: "false" });
     }
   } catch (error) {
     res.status(500).json({ message: "error server" });
