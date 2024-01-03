@@ -5,22 +5,101 @@ const cors = require("cors");
 const moment = require("moment");
 const { Pool } = require("pg");
 const route = require("./route");
+const bodyParser = require("body-parser");
+const metautil = require("metautil");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+require("dotenv").config();
+
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 const createUser = require("./middlewares/createUser");
-require("dotenv").config();
-const app = express();
-const saveMessage = require("./saveMessage");
-app.use(cors({ origin: "*" }));
-
 const getMessages = require("./getMessages");
+const saveMessage = require("./saveMessage");
+
+const app = express();
+
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     require: true,
+//   },
+// });
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+const pool = new Pool({
+  user: "storm",
+  host: "localhost",
+  database: "test",
+  password: "meepo2014",
+  port: 5432,
+});
+app.use(cors({ origin: "*" }));
 
 app.use(route);
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
+// const addPassword = async () => {
+//   const password = "evgeny";
+//   const username = "evgeny";
+//   const hash = await metautil.hashPassword(password);
+//   try {
+//     const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
+//     await pool.query(query, [username, hash]);
+//   } catch (error) {
+//     console.error("error:", error);
+//     throw error;
+//   }
+// };
+
+// addPassword();
+
+app.post("/", async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const query = "SELECT * FROM users WHERE username = $1";
+    const result = await pool.query(query, [username]);
+
+    if (result.rows.length > 0) {
+      const storedHash = result.rows[0].password;
+
+      const valid = await metautil.validatePassword(password, storedHash);
+
+      if (valid) {
+        const accessToken = jwt.sign({ username }, "secret_key");
+
+        res.cookie("access_token", accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "strict",
+        });
+
+        res.status(200).json({ message: "true" });
+      } else {
+        res.status(401).json({ message: "false" });
+      }
+    } else {
+      res.status(401).json({ message: "user not find" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "error server" });
+  }
+});
+
+app.get("/sign", (req, res) => {
+  const accessToken = req.cookies.access_token;
+
+  if (!accessToken) {
+    return res.status(401).json({ message: "access denied" });
+  }
+
+  try {
+    const decoded = jwt.verify(accessToken, "secret_key");
+
+    res.status(200).json({ message: "access +" });
+  } catch (error) {
+    res.status(401).json({ message: "invalid -" });
+  }
 });
 
 app.use(express.json());
