@@ -66,7 +66,9 @@ app.post("/", async (req, res) => {
       const valid = await metautil.validatePassword(password, storedHash);
 
       if (valid) {
-        const accessToken = jwt.sign({ username }, "secret_key");
+        const accessToken = jwt.sign({ username }, "secret_key", {
+          expiresIn: "15s",
+        });
 
         res.cookie("access_token", accessToken, {
           httpOnly: true,
