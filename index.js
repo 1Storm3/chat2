@@ -39,6 +39,8 @@ app.use(cors({ origin: "*" }));
 
 app.use(route);
 
+// регистрация пользователя через добавление в базу данных
+
 // const addPassword = async () => {
 //   const password = "evgeny";
 //   const username = "evgeny";
@@ -54,6 +56,11 @@ app.use(route);
 
 // addPassword();
 
+// Сначала мы получаем в теле запроса логин и пароль с клиента
+// затем мы проверяем в бд по логину  пароль, если пароль верный
+// осуществляем вход и генерируем токен на 15 секунд
+// затем мы отправляем в базу данных id юзера, время создания токена +15 секунд и сам токен
+// далее мы отправляем куки на фронт,в которых лежит токен
 app.post("/", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -93,6 +100,7 @@ app.post("/", async (req, res) => {
   }
 });
 
+// Проверка токена в бд
 app.use(async (req, res, next) => {
   const token = req.cookies.access_token;
 
@@ -114,6 +122,7 @@ app.use(async (req, res, next) => {
   }
 });
 
+// защищенный маршрут через доступ по авторизации по токену в куках
 app.get("/sign", (req, res) => {
   const accessToken = req.cookies.access_token;
 
@@ -132,8 +141,7 @@ app.get("/sign", (req, res) => {
 
 app.use(express.json());
 
-app.use("/login", createUser);
-
+// app.use("/login", createUser);
 // app.get("/users", async function getUsers(req, res) {
 //   const users = await pool.query("SELECT * FROM person");
 //   res.send(users.rows);
