@@ -70,6 +70,13 @@ app.post("/", async (req, res) => {
           expiresIn: "15s",
         });
 
+        const user_id = result.rows[0].id;
+
+        const expirationDate = new Date(Date.now() + 15 * 1000);
+        await pool.query(
+          "INSERT INTO tokens (user_id, token, expiration) VALUES ($1, $2, $3)",
+          [user_id, accessToken, expirationDate]
+        );
         res.cookie("access_token", accessToken, {
           httpOnly: true,
           secure: true,
@@ -82,6 +89,27 @@ app.post("/", async (req, res) => {
       res.status(401).json({ message: "false" });
     }
   } catch (error) {
+    res.status(500).json({ message: "error server" });
+  }
+});
+
+app.use(async (req, res, next) => {
+  const token = req.cookies.access_token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token null" });
+  }
+  try {
+    const query =
+      "SELECT * FROM tokens WHERE token = $1 AND expiration > NOW()";
+    const tokenData = await pool.query(query, [token]);
+
+    if (tokenData.rows.length === 0) {
+      return res.status(401).json({ message: "token nedestvitelen" });
+    }
+    next();
+  } catch (error) {
+    console.error("error pri proverke", error);
     res.status(500).json({ message: "error server" });
   }
 });
