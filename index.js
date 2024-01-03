@@ -18,23 +18,23 @@ const saveMessage = require("./saveMessage");
 
 const app = express();
 
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     require: true,
-//   },
-// });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    require: true,
+  },
+});
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const pool = new Pool({
-  user: "storm",
-  host: "localhost",
-  database: "test",
-  password: "meepo2014",
-  port: 5432,
-});
+// const pool = new Pool({
+//   user: "storm",
+//   host: "localhost",
+//   database: "test",
+//   password: "meepo2014",
+//   port: 5432,
+// });
 app.use(cors({ origin: "*" }));
 
 app.use(route);
