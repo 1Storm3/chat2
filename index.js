@@ -18,41 +18,41 @@ const saveMessage = require("./saveMessage");
 
 const app = express();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
-});
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     require: true,
+//   },
+// });
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const pool = new Pool({
-//   user: "storm",
-//   host: "localhost",
-//   database: "test",
-//   password: "meepo2014",
-//   port: 5432,
-// });
+const pool = new Pool({
+  user: "storm",
+  host: "localhost",
+  database: "test",
+  password: "meepo2014",
+  port: 5432,
+});
 app.use(cors({ origin: "*" }));
 
 app.use(route);
 
-const addPassword = async () => {
-  const password = "evgeny";
-  const username = "evgeny";
-  const hash = await metautil.hashPassword(password);
-  try {
-    const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
-    await pool.query(query, [username, hash]);
-  } catch (error) {
-    console.error("error:", error);
-    throw error;
-  }
-};
+// const addPassword = async () => {
+//   const password = "evgeny";
+//   const username = "evgeny";
+//   const hash = await metautil.hashPassword(password);
+//   try {
+//     const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
+//     await pool.query(query, [username, hash]);
+//   } catch (error) {
+//     console.error("error:", error);
+//     throw error;
+//   }
+// };
 
-addPassword();
+// addPassword();
 
 app.post("/", async (req, res) => {
   const { username, password } = req.body;
