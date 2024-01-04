@@ -13,7 +13,7 @@ const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 const createUser = require("./middlewares/createUser");
 const getMessages = require("./getMessages");
 const saveMessage = require("./saveMessage");
-const loginUser = require("./Login/loginUser");
+const loginUser = require("./api_Login/loginUser");
 const app = express();
 
 const pool = new Pool({
@@ -59,7 +59,7 @@ app.use(route);
 // осуществляем вход и генерируем токен на 15 секунд
 // затем мы отправляем в базу данных id юзера, время создания токена +15 секунд и сам токен
 // далее мы отправляем куки на фронт,в которых лежит токен
-app.post("/", loginUser);
+app.post("/login", loginUser);
 
 // Проверка токена в бд
 app.use(async (req, res, next) => {
