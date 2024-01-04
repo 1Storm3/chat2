@@ -14,6 +14,7 @@ const createUser = require("./middlewares/createUser");
 const getMessages = require("./getMessages");
 const saveMessage = require("./saveMessage");
 const loginUser = require("./api_Login/loginUser");
+const registerUser = require("./api_register/register");
 const app = express();
 
 const pool = new Pool({
@@ -36,23 +37,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors({ origin: "*" }));
 
 app.use(route);
-
-// регистрация пользователя через добавление в базу данных
-
-// const addPassword = async () => {
-//   const password = "evgeny";
-//   const username = "evgeny";
-//   const hash = await metautil.hashPassword(password);
-//   try {
-//     const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
-//     await pool.query(query, [username, hash]);
-//   } catch (error) {
-//     console.error("error:", error);
-//     throw error;
-//   }
-// };
-
-// addPassword();
 
 // Сначала мы получаем в теле запроса логин и пароль с клиента
 // затем мы проверяем в бд по логину  пароль, если пароль верный
@@ -124,6 +108,25 @@ app.post("/refresh", async (req, res) => {
   }
 });
 
+app.get("/getting", async (req, res) => {
+  try {
+    const query = "SELECT username FROM users WHERE username =$1";
+    const username = req.body;
+
+    const result = await pool.query(query, [username]);
+
+    if (result.rows.length > 0) {
+      const username = result.rows[0].username;
+      res.status(200).json({ username });
+    } else {
+      res.status(404).json({ message: "user not find" });
+    }
+  } catch (error) {
+    console.error("error usera", error);
+    res.status(500).json({ message: "error serveras" });
+  }
+});
+
 // защищенный маршрут через доступ по авторизации по токену в куках
 app.get("/sign", (req, res) => {
   const accessToken = req.cookies.access_token;
@@ -140,6 +143,8 @@ app.get("/sign", (req, res) => {
     res.status(401).json({ message: "invalid -" });
   }
 });
+
+app.post("/register", registerUser);
 
 app.use(express.json());
 
