@@ -12,7 +12,7 @@ const pool = new Pool({
 const registerUser = async (req, res) => {
   const { username, password } = req.body;
   const hash = await metautil.hashPassword(password);
-
+  res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
     await pool.query(query, [username, hash]);
