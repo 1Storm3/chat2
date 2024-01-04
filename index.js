@@ -33,22 +33,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   password: "meepo2014",
 //   port: 5432,
 // });
-app.use(cors());
+const corsOptions = {
+  origin: "http://chaoschatix.netlify.app", // Замените на ваш фронтенд-домен
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 app.post("/register", registerUser);
+
 app.use(route);
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://chaoschatix.netlify.app/register"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  next();
-});
+
 // Сначала мы получаем в теле запроса логин и пароль с клиента
 // затем мы проверяем в бд по логину  пароль, если пароль верный
 // осуществляем вход и генерируем токен на 15 секунд
@@ -166,7 +161,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "http://chaoschatix.netlify.app",
     methods: ["GET", "POST"],
   },
 });
