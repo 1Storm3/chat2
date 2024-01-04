@@ -35,7 +35,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // });
 const corsOptions = {
   origin: "*", // Замените на ваш фронтенд-домен
-  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -154,10 +153,7 @@ app.use(express.json());
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST"],
-  },
+  cors: {},
 });
 
 io.on("connection", (socket) => {
