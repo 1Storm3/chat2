@@ -6,10 +6,10 @@ const {
 } = require("./generateTokens");
 const saveTokensDB = require("./saveTokensDB");
 
-async function handleLogin(req, res, username) {
+async function handleLogin(req, res, user) {
   const user_id = req.result.rows[0].id;
-  const accessToken = generateAccessToken(username);
-  const refreshToken = generateRefreshToken(username);
+  const accessToken = generateAccessToken(user);
+  const refreshToken = generateRefreshToken(user);
   const sessionStart = new Date();
   const sessionEnd = new Date(Date.now() + 15 * 1000);
 
