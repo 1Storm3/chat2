@@ -15,11 +15,6 @@ const saveMessage = require("./saveMessage");
 const loginUser = require("./api_Login/loginUser");
 const registerUser = require("./api_register/register");
 const app = express();
-var io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
-});
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
