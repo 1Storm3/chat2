@@ -9,13 +9,11 @@ const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
-const authenticateUser = require("./Login/authenticateUser");
-const handleLogin = require("./Login/handleLogin");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 const createUser = require("./middlewares/createUser");
 const getMessages = require("./getMessages");
 const saveMessage = require("./saveMessage");
-const metautil = require("metautil");
+const loginUser = require("./Login/loginUser");
 const app = express();
 
 const pool = new Pool({
@@ -61,23 +59,7 @@ app.use(route);
 // осуществляем вход и генерируем токен на 15 секунд
 // затем мы отправляем в базу данных id юзера, время создания токена +15 секунд и сам токен
 // далее мы отправляем куки на фронт,в которых лежит токен
-app.post("/", async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    const { isAuthenticated, user } = await authenticateUser(
-      username,
-      password
-    );
-    if (isAuthenticated) {
-      await handleLogin(req, res, user);
-    } else {
-      res.status(401).json({ message: "false" });
-    }
-  } catch (error) {
-    console.error("Ошибка в обработчике маршрута:", error);
-    res.status(500).json({ message: "error server" });
-  }
-});
+app.post("/", loginUser);
 
 // Проверка токена в бд
 app.use(async (req, res, next) => {
