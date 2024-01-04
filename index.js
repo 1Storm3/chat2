@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   port: 5432,
 // });
 const corsOptions = {
-  origin: "*", // Замените на ваш фронтенд-домен
+  origin: ["http://localhost:3000", "https://localhost:3000"], // Замените на ваш фронтенд-домен
 };
 
 app.use(cors(corsOptions));
