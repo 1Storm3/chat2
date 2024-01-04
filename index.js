@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   port: 5432,
 // });
 const corsOptions = {
-  origin: "http://chaoschatix.netlify.app", // Замените на ваш фронтенд-домен
+  origin: "*", // Замените на ваш фронтенд-домен
   credentials: true,
 };
 
@@ -151,12 +151,6 @@ app.get("/sign", (req, res) => {
 });
 
 app.use(express.json());
-
-// app.use("/login", createUser);
-// app.get("/users", async function getUsers(req, res) {
-//   const users = await pool.query("SELECT * FROM person");
-//   res.send(users.rows);
-// });
 
 const server = http.createServer(app);
 const io = new Server(server, {
