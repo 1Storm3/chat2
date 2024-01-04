@@ -1,4 +1,12 @@
 const metautil = require("metautil");
+const { Pool } = require("pg");
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    require: true,
+  },
+});
 
 // Поиск пользователя в базе данных и валидация введенного пароля
 async function authenticateUser(username, password) {
