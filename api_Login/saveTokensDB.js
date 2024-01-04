@@ -6,7 +6,13 @@ const pool = new Pool({
     require: true,
   },
 });
-
+// const pool = new Pool({
+//   user: "storm",
+//   host: "localhost",
+//   database: "test",
+//   password: "meepo2014",
+//   port: 5432,
+// });
 async function saveTokensDB(
   user_id,
   accessToken,
