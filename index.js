@@ -6,11 +6,11 @@ const moment = require("moment");
 const { Pool } = require("pg");
 const route = require("./route");
 const bodyParser = require("body-parser");
-const metautil = require("metautil");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
-
+const authenticateUser = require("./Login/authenticateUser");
+const handleLogin = require("./Login/handleLogin");
 const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 const createUser = require("./middlewares/createUser");
 const getMessages = require("./getMessages");
@@ -64,40 +64,9 @@ app.use(route);
 app.post("/", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const query = "SELECT * FROM users WHERE username = $1";
-    const result = await pool.query(query, [username]);
-
-    if (result.rows.length > 0) {
-      const storedHash = result.rows[0].password;
-
-      const valid = await metautil.validatePassword(password, storedHash);
-
-      if (valid) {
-        const accessToken = jwt.sign({ username }, "secret_key", {
-          expiresIn: "15s",
-        });
-
-        const user_id = result.rows[0].id;
-
-        const refreshToken = jwt.sign({ username }, "refresh_secret_key", {
-          expiresIn: "7d",
-        });
-
-        const sessionStart = new Date();
-        const sessionEnd = new Date(Date.now() + 15 * 1000);
-
-        await pool.query(
-          "INSERT INTO tokens (user_id, token, refresh_token, session_start, session_end) VALUES ($1, $2, $3, $4, $5)",
-          [user_id, accessToken, refreshToken, sessionStart, sessionEnd]
-        );
-        res.cookie("access_token", accessToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: "strict",
-        });
-
-        res.status(200).json({ message: "true" });
-      }
+    const isAuthenticated = await authenticateUser(username, password);
+    if (isAuthenticated) {
+      await handleLogin(req, res, username);
     } else {
       res.status(401).json({ message: "false" });
     }
