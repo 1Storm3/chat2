@@ -12,12 +12,12 @@ const pool = new Pool({
 async function authenticateUser(username, password) {
   const query = "SELECT * FROM users WHERE username = $1";
   const result = await pool.query(query, [username]);
-  console.log(result.rows[0]);
+  const user = result.rows[0];
   const isAuthenticated =
     result.rows.length > 0 &&
     (await metautil.validatePassword(password, result.rows[0].password));
 
-  return { isAuthenticated, user: result.rows[0] };
+  return { isAuthenticated, user };
 }
 
 module.exports = authenticateUser;
