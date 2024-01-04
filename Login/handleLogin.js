@@ -1,4 +1,8 @@
 // Создание токенов и сохранение их в базу данных
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 const {
   generateAccessToken,
   generateRefreshToken,
