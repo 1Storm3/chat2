@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   port: 5432,
 // });
 const corsOptions = {
-  origin: "https://chat-online-kjxa.onrender.com",
+  origin: ["https://chaoschatix.netlify.app", "http://chaoschatix.netlify.app"],
 };
 
 app.use(cors(corsOptions));
