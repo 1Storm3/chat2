@@ -33,7 +33,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   password: "meepo2014",
 //   port: 5432,
 // });
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "https://chaoschatix.netlify.app/register",
+  })
+);
 app.post("/register", registerUser);
 app.use(route);
 
