@@ -46,7 +46,7 @@ app.use(route);
 app.post("/login", loginUser);
 
 // Проверка токена в бд
-app.use(async (req, res, next) => {
+app.use("/sign", async (req, res, next) => {
   const token = req.cookies.access_token;
 
   if (!token) {
