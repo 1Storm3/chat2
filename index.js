@@ -64,9 +64,12 @@ app.use(route);
 app.post("/", async (req, res) => {
   const { username, password } = req.body;
   try {
-    const isAuthenticated = await authenticateUser(username, password);
+    const { isAuthenticated, user } = await authenticateUser(
+      username,
+      password
+    );
     if (isAuthenticated) {
-      await handleLogin(req, res, username);
+      await handleLogin(req, res, user);
     } else {
       res.status(401).json({ message: "false" });
     }
