@@ -17,7 +17,7 @@ async function authenticateUser(username, password) {
     result.rows.length > 0 &&
     (await metautil.validatePassword(password, result.rows[0].password));
 
-  return { isAuthenticated, user: result.rows[0] }, console.log(user);
+  return { isAuthenticated, user: result.rows[0] };
 }
 
 module.exports = authenticateUser;
