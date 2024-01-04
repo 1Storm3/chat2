@@ -79,10 +79,16 @@ app.post("/", async (req, res) => {
 
         const user_id = result.rows[0].id;
 
-        const expirationDate = new Date(Date.now() + 15 * 1000);
+        const refreshToken = jwt.sign({ username }, "refresh_secret_key", {
+          expiresIn: "7d",
+        });
+
+        const sessionStart = new Date();
+        const sessionEnd = new Date(Date.now() + 15 * 1000);
+
         await pool.query(
-          "INSERT INTO tokens (user_id, token, expiration) VALUES ($1, $2, $3)",
-          [user_id, accessToken, expirationDate]
+          "INSERT INTO tokens (user_id, token, refresh_token, session_start, session_end) VALUES ($1, $2, $3, $4, $5)",
+          [user_id, accessToken, refreshToken, sessionStart, sessionEnd]
         );
         res.cookie("access_token", accessToken, {
           httpOnly: true,
@@ -119,6 +125,47 @@ app.use(async (req, res, next) => {
   } catch (error) {
     console.error("error pri proverke", error);
     res.status(500).json({ message: "error server" });
+  }
+});
+
+app.post("/refresh", async (req, res) => {
+  const refreshToken = req.cookies.refresh_token;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: "Отсутствует refresh-токен" });
+  }
+
+  try {
+    // Поиск refresh-токена в базе данных
+    const query = "SELECT * FROM tokens WHERE refresh_token = $1";
+    const tokenData = await pool.query(query, [refreshToken]);
+
+    if (tokenData.rows.length === 0) {
+      return res
+        .status(403)
+        .json({ message: "Недействительный refresh-токен" });
+    }
+
+    const username = tokenData.rows[0].username;
+
+    // Создание нового access-токена
+    const newAccessToken = jwt.sign({ username }, "secret_key", {
+      expiresIn: "15s", // Новый access-токен
+    });
+
+    // Обновление access-токена в базе данных (опционально)
+    // Например, если вам нужно обновить access-токен в базе данных для текущей сессии
+
+    res.cookie("access_token", newAccessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+
+    res.status(200).json({ message: "true" });
+  } catch (error) {
+    console.error("Ошибка при обновлении токена:", error);
+    res.status(500).json({ message: "Ошибка сервера" });
   }
 });
 
