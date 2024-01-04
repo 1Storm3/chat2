@@ -161,7 +161,7 @@ app.use(express.json());
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://chaoschatix.netlify.app",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
