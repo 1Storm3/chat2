@@ -34,8 +34,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   password: "meepo2014",
 //   port: 5432,
 // });
-app.use(cors({ origin: "*" }));
-
+app.use(cors());
+app.post("/register", registerUser);
 app.use(route);
 
 // Сначала мы получаем в теле запроса логин и пароль с клиента
@@ -143,8 +143,6 @@ app.get("/sign", (req, res) => {
     res.status(401).json({ message: "invalid -" });
   }
 });
-
-app.post("/register", registerUser);
 
 app.use(express.json());
 
