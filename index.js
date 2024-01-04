@@ -36,7 +36,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.post("/register", registerUser);
 app.use(route);
-
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://chaoschatix.netlify.app/register"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  next();
+});
 // Сначала мы получаем в теле запроса логин и пароль с клиента
 // затем мы проверяем в бд по логину  пароль, если пароль верный
 // осуществляем вход и генерируем токен на 15 секунд
