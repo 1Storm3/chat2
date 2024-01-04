@@ -15,7 +15,7 @@ const { addUser, findUser, getRoomUsers, removeUser } = require("./users");
 const createUser = require("./middlewares/createUser");
 const getMessages = require("./getMessages");
 const saveMessage = require("./saveMessage");
-
+const metautil = require("metautil");
 const app = express();
 
 const pool = new Pool({
@@ -71,6 +71,7 @@ app.post("/", async (req, res) => {
       res.status(401).json({ message: "false" });
     }
   } catch (error) {
+    console.error("Ошибка в обработчике маршрута:", error);
     res.status(500).json({ message: "error server" });
   }
 });
