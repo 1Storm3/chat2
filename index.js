@@ -3,7 +3,7 @@ const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const moment = require("moment");
-const { Pool } = require("pg");
+const pool = require("./db");
 const route = require("./route");
 const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
@@ -16,23 +16,10 @@ const loginUser = require("./api_Login/loginUser");
 const registerUser = require("./api_register/register");
 const app = express();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
-});
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// const pool = new Pool({
-//   user: "storm",
-//   host: "localhost",
-//   database: "test",
-//   password: "meepo2014",
-//   port: 5432,
-// });
 const corsOptions = {
   origin: [
     "https://chaoschatix.netlify.app",

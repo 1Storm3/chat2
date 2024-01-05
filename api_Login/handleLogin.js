@@ -1,5 +1,4 @@
 // Создание токенов и сохранение их в базу данных
-
 const {
   generateAccessToken,
   generateRefreshToken,
