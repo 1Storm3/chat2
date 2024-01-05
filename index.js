@@ -13,7 +13,6 @@ const getMessages = require("./messages/getMessages");
 const saveMessage = require("./messages/saveMessage");
 const loginUser = require("./api_Login/loginUser");
 const registerUser = require("./api_register/register");
-// const { Pool } = require("pg");
 const app = express();
 const pool = require("./db");
 app.use(cookieParser());
@@ -28,21 +27,6 @@ const corsOptions = {
     "https://localhost:3000",
   ],
 };
-
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     require: true,
-//   },
-// });
-
-// const pool = new Pool({
-//   user: "storm",
-//   host: "localhost",
-//   database: "test",
-//   password: "meepo2014",
-//   port: 5432,
-// });
 
 app.use(cors(corsOptions));
 

@@ -1,21 +1,7 @@
 // регистрация пользователя через добавление в базу данных
 const metautil = require("metautil");
-// const { Pool } = require("pg");
-const pool = require("../db");
-// const pool = new Pool({
-//   connectionString: process.env.DATABASE_URL,
-//   ssl: {
-//     require: true,
-//   },
-// });
 
-// const pool = new Pool({
-//   user: "storm",
-//   host: "localhost",
-//   database: "test",
-//   password: "meepo2014",
-//   port: 5432,
-// });
+const pool = require("../db");
 
 const registerUser = async (req, res) => {
   const { username, password } = req.body;
