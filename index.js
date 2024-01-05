@@ -13,9 +13,9 @@ const getMessages = require("./messages/getMessages");
 const saveMessage = require("./messages/saveMessage");
 const loginUser = require("./api_Login/loginUser");
 const registerUser = require("./api_register/register");
-const { Pool } = require("pg");
+// const { Pool } = require("pg");
 const app = express();
-
+const pool = require("./db");
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,12 +29,12 @@ const corsOptions = {
   ],
 };
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
-});
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     require: true,
+//   },
+// });
 
 // const pool = new Pool({
 //   user: "storm",

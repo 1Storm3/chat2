@@ -1,20 +1,20 @@
 const metautil = require("metautil");
-const { Pool } = require("pg");
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
-});
-
+// const { Pool } = require("pg");
+const pool = require("./db");
 // const pool = new Pool({
-//   user: "storm",
-//   host: "localhost",
-//   database: "test",
-//   password: "meepo2014",
-//   port: 5432,
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     require: true,
+//   },
 // });
+
+// // const pool = new Pool({
+// //   user: "storm",
+// //   host: "localhost",
+// //   database: "test",
+// //   password: "meepo2014",
+// //   port: 5432,
+// // });
 
 // Поиск пользователя в базе данных и валидация введенного пароля
 async function authenticateUser(username, password) {

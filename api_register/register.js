@@ -1,13 +1,13 @@
 // регистрация пользователя через добавление в базу данных
 const metautil = require("metautil");
-const { Pool } = require("pg");
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    require: true,
-  },
-});
+// const { Pool } = require("pg");
+const pool = require("./db");
+// const pool = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     require: true,
+//   },
+// });
 
 // const pool = new Pool({
 //   user: "storm",
@@ -22,7 +22,7 @@ const registerUser = async (req, res) => {
   const hash = await metautil.hashPassword(password);
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    const checkUser = "SELECT * FROM users WHERE username = $1";
+    const checkUser = "SELECT * FROM users WHERE username = $1 OR email = $2";
     const existUser = await pool.query(checkUser, [username]);
 
     if (existUser.rows.length > 0) {
