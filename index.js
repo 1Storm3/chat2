@@ -34,7 +34,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   port: 5432,
 // });
 const corsOptions = {
-  origin: ["https://chaoschatix.netlify.app", "http://chaoschatix.netlify.app"],
+  origin: [
+    "https://chaoschatix.netlify.app",
+    "http://chaoschatix.netlify.app",
+    "http://localhost:3000",
+    "https://localhost:3000",
+  ],
 };
 
 app.use(cors(corsOptions));
