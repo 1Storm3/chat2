@@ -29,6 +29,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json("user exist");
     }
     const query = "INSERT INTO users(username, password) VALUES ($1, $2)";
+
     await pool.query(query, [username, hash]);
     return res.json("1");
   } catch (error) {
