@@ -28,7 +28,7 @@ async function handleLogin(req, res, user) {
       sameSite: "strict",
     });
 
-    res.status(200).json({ message: "true" });
+    res.status(200).json({ message: "true" }, { access_token: accessToken });
   }
 }
 
