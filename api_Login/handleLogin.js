@@ -7,7 +7,6 @@ const {
 const saveTokensDB = require("./saveTokensDB");
 
 async function handleLogin(req, res, user) {
-  console.log(user);
   const user_id = user.id;
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
